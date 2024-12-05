@@ -44,8 +44,13 @@ public class ModalCriacaoCampo extends Tela {
         jLabel4 = new javax.swing.JLabel();
         lblArquivo = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setPreferredSize(new java.awt.Dimension(768, 445));
 
@@ -92,7 +97,6 @@ public class ModalCriacaoCampo extends Tela {
 
         lblArquivo.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         lblArquivo.setText("sem arquivo");
-        lblArquivo.setAutoscrolls(true);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -113,7 +117,7 @@ public class ModalCriacaoCampo extends Tela {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnEscolherArquivo)
                                 .addGap(37, 37, 37)
-                                .addComponent(lblArquivo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(lblArquivo)))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -175,7 +179,7 @@ public class ModalCriacaoCampo extends Tela {
 
     private void btnEscolherArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEscolherArquivoActionPerformed
         arquivo = selecionarArquivoPDF();
-        lblArquivo.setText(arquivo.getName());
+        lblArquivo.setText("arquivo recebido");
     }//GEN-LAST:event_btnEscolherArquivoActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -192,6 +196,13 @@ public class ModalCriacaoCampo extends Tela {
         }
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        GerarTelaFactory gerar = new GerarTelaFactory();
+        Tela tela = gerar.gerarTela("visualizarcurriculo");
+        tela.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

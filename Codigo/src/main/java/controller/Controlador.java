@@ -136,8 +136,19 @@ public class Controlador {
         return tela;
     }
     
-    public static void editarCampo(String titulo, String descricao, String caminho){
-        
+    public static Tela editarCampo(String titulo, String descricao, File arquivo, CampoCurriculo campoSelecionado){
+        if(campoSelecionado!=null){
+            campoSelecionado.setTitulo(titulo);
+            campoSelecionado.setDescricao(descricao);
+            campoSelecionado.getPdf().setArquivo(arquivo);
+            GerarTelaFactory gerar = new GerarTelaFactory();
+            Tela tela = gerar.gerarTela("edicaocampo");
+            return tela;
+        }else{
+            GerarTelaFactory gerar = new GerarTelaFactory();
+            Tela tela = gerar.gerarTela("erro");
+            return tela;
+        }
     }
     
     public static Tela excluirCamposCurriculo(){
@@ -150,7 +161,7 @@ public class Controlador {
     public static Tela excluirCampo(CampoCurriculo campo){
         getUsuarioLogado().getCurriculo().getCampoCurriculo().remove(campo);
         GerarTelaFactory gerar = new GerarTelaFactory();
-        Tela tela = gerar.gerarTela("visualizarcurriculo");
+        Tela tela = gerar.gerarTela("edicaocampo");
         return tela;
     }
     

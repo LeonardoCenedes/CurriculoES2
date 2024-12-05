@@ -53,9 +53,15 @@ public class ModalEdicaoCampo extends Tela {
         cbxCampos = new javax.swing.JComboBox<>();
         btnEscolherArquivo1 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        btnExcluir = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setPreferredSize(new java.awt.Dimension(768, 445));
 
@@ -119,6 +125,14 @@ public class ModalEdicaoCampo extends Tela {
         jLabel5.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
         jLabel5.setText("EDIÇÃO DE CAMPO");
 
+        btnExcluir.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        btnExcluir.setText("EXCLUIR");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -137,15 +151,16 @@ public class ModalEdicaoCampo extends Tela {
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnEscolherArquivo, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
-                                .addComponent(btnEscolherArquivo1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txtTitulo)
-                            .addComponent(jScrollPane1))))
+                            .addComponent(jScrollPane1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnEscolherArquivo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnEscolherArquivo1, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                                    .addComponent(btnExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -179,7 +194,9 @@ public class ModalEdicaoCampo extends Tela {
                         .addGap(18, 18, 18)
                         .addComponent(btnEscolherArquivo1)))
                 .addGap(28, 28, 28)
-                .addComponent(jButton1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(btnExcluir))
                 .addGap(52, 52, 52))
         );
 
@@ -213,11 +230,7 @@ public class ModalEdicaoCampo extends Tela {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if(!arquivo.equals(null)){
-            campoSelecionado.setTitulo(txtTitulo.getText().trim());
-            campoSelecionado.setDescricao(txtDescricao.getText().trim());
-            campoSelecionado.getPdf().setArquivo(arquivo);
-            GerarTelaFactory gerar = new GerarTelaFactory();
-            Tela tela = gerar.gerarTela("visualizarcurriculo");
+            Tela tela = Controlador.editarCampo(txtTitulo.getText().trim(), txtDescricao.getText().trim(), arquivo, campoSelecionado);
             tela.setVisible(true);
             this.dispose();
         }
@@ -233,6 +246,21 @@ public class ModalEdicaoCampo extends Tela {
          abrirPDF(arquivo);
     }//GEN-LAST:event_btnEscolherArquivo1ActionPerformed
 
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        if(arquivo!=null){
+            Tela tela = Controlador.excluirCampo(campoSelecionado);
+            tela.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        GerarTelaFactory gerar = new GerarTelaFactory();
+        Tela tela = gerar.gerarTela("visualizarcurriculo");
+        tela.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
@@ -241,6 +269,7 @@ public class ModalEdicaoCampo extends Tela {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEscolherArquivo;
     private javax.swing.JButton btnEscolherArquivo1;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JComboBox<String> cbxCampos;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
